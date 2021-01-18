@@ -1,0 +1,71 @@
+---
+title: "FIN654 Async Week 2"
+author: "Kyle Walter"
+date: "1/17/2021"
+output: html_document
+---
+
+```{r}
+require(quantmod)
+require(PerformanceAnalytics)
+require(tidyverse)
+require(dygraphs)
+require(highcharter)
+```
+
+Get the data for Starbucks in the US from First Trading day of 2000 to the last trading day of 2019. Remember that Yahoo Finance gets the date to the last prior date.
+
+```{r}
+getSymbols("SBUX",from="2000-01-01",to="2020-01-01")
+head(SBUX)
+```
+
+Next get the daily return and save it in a variable called latte
+
+```{r}
+dailyReturn(SBUX$SBUX.Adjusted) ->latte
+latte %>% head() %>% round(4)
+```
+Use the Return.portfolio function from the performance analyzer to computer the return of the Starbuck stock. This only shows the amount based on 1 dollar investement
+
+```{r}
+Return.portfolio(latte,wealth.index = T)-> cocoa
+head(cocoa)
+cocoa %>% tail() %>% round(4)
+```
+
+The problem is based on the hypo, we invested 500. So multiple the return from the Return.portfolio and then display the last 6 lines.
+
+```{r}
+cocoa*500 -> mocha
+mocha %>% head()
+mocha %>% tail()
+```
+
+As shown in the output we made $16720.17 - too bad it is only Hypothetical.
+
+Next we'll graph the the return by the using the dygraph's packages.
+```{r}
+dyRangeSelector(dyOptions(dygraph(mocha), fillGraph = T))
+```
+
+Question 2: If you were to invest $500 in Starbucks Corporation's stock on the first trading day of 2010, how much would that $500 investment have turned out on the last trading day of 2019?
+
+```{r}
+getSymbols("SBUX", from="2010-01-01", to="2020-01-01")
+SBUX2 <- dailyReturn(SBUX$SBUX.Adjusted)
+SBUX2 <- Return.portfolio(SBUX2, wealth.index = T)
+SBUX2 <- SBUX2*500
+tail(SBUX2)
+```
+The return is $4,471.33
+
+```{r}
+hchart(mocha, name="My Bucks", color="yellow")
+```
+
+Lastly Cleanup the enviornment
+```{r, cleanup}
+rm(list = ls())
+```
+
