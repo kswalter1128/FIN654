@@ -1,0 +1,39 @@
+---
+title: "Week 2 Async"
+author: "Kyle Walter"
+date: "1/17/2021"
+output: word_document
+---
+
+```{r packages}
+require(quantmod)
+require(PerformanceAnalytics)
+```
+
+
+On Jully 27, 2011, Dunkin Brang Group's stocks were launched on the NASDAQ stock market. Suppose you invested in Dunkin' stocks on the first trading day of 2012. What was the mean monthly return on Dunkn' stocks between the first trading day of 2012 and the last trading day of 2019?
+
+```{r get price}
+getSymbols("DNKN",from="2012-01-01", to="2020-01-01")
+head(DNKN)
+```
+
+```{r Monthly Returns}
+glazed<- monthlyReturn(DNKN$DNKN.Adjusted)
+round(head(glazed),4)
+```
+
+```{r geometric historical mean}
+mean.geometric(glazed)
+```
+If you bought DNKN stock on First trading day of 2012 and held till the end of 2019 the mean return monthly return would be 1.35% per month
+
+Compute the mean period return, this is the expected return
+```{r monthly expected return}
+mean(glazed)
+```
+
+```{r clear the objects, echo=FALSE}
+rm(list=ls())
+```
+

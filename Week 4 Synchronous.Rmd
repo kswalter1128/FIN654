@@ -1,0 +1,47 @@
+---
+title: "Week 4 Synchronous"
+author: "Kyle Walter"
+date: "2/3/2021"
+output: word_document
+---
+
+let's load the data
+```{r}
+require(PerformanceAnalytics)
+```
+
+Display the data
+```{r}
+tail(disney.monthly)
+tail(no.risk)
+```
+
+
+Compute the excess returns on DIS and the S&P 500 Index in excess of 3-month Treasury Bills
+```{r}
+disney.excess.monthly <- disney.monthly-no.risk
+market.excess.monthly <- market.monthly-no.risk
+```
+
+Excess Return = Past Return minus Past Risk Free Return
+
+Next let's plot Disney's Market vs the Market
+```{r}
+chart.Regression(disney.excess.monthly, market.excess.monthly, fit = F, main = "My Lame (noninteractive) Chart", xlab = "US Market", ylab = "Disney Stock")
+```
+Let's find the linerar realtionship
+```{r}
+mickey<- lm(disney.excess.monthly~market.excess.monthly)
+chart.Regression(disney.excess.monthly, market.excess.monthly, fit = F)
+abline(mickey)
+```
+Equation is called a linear model because the line doesn't pass through the actual points perfectly. The fit is a line which is why it is recognized as Linear Model.
+
+To see the value of the coefficent, just type the name of the saved model
+```{r}
+mickey
+```
+
+Company specific risk or firmwide risk, specific to a company and news about the company.
+
+Market specific risk, are the market adjustments. If something affects overall market it cannot be avoided. The Beta Coefficent predicts what happens to the stock in a market movement. So Disney in this case will move relative to the market.

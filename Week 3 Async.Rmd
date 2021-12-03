@@ -1,0 +1,32 @@
+---
+title: "Week6 Async"
+author: "Kyle Walter"
+date: "2/15/2021"
+output: html_document
+---
+
+First load the data
+```{r}
+load(file = "Week6/6_stocks.rdata")
+require(quantmod)
+require(scales)
+head(stocks)
+```
+
+```{r}
+require(PerformanceAnalytics)
+ALLEQUAL<- Return.portfolio(stocks, weights = c(1/8,1/8,1/8,1/8,1/8,1/8,1/8,1/8), geometric = F)
+mean(ALLEQUAL)-.001
+```
+
+```{r}
+head(stocks)
+TESLATTE<- Return.portfolio(stocks, weights = c(0,0,0,0,0,.5,.5,0), geometric = F)
+mean(TESLATTE)-.001
+```
+
+ShareRatio
+```{r}
+SharpeRatio(ALLEQUAL, Rf = .001)
+```
+

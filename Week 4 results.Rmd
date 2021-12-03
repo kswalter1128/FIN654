@@ -1,0 +1,85 @@
+---
+title: "Week 4 Async"
+author: "Kyle Walter"
+date: "1/30/2021"
+output: word_document
+---
+
+Use R and download teh index data for S&P500 and price data for Apple, INC stocks. Download the data between the first trading day of May 2015 and the last trading day of April 2020.
+
+Load the Packages needed for this exercise
+```{r}
+require(quantmod)
+require(PerformanceAnalytics)
+```
+
+```{r}
+getSymbols(c("AAPL","^GSPC"), from="2015-05-01", to="2020-05-01")
+```
+
+Inspect the Data
+```{r}
+head(GSPC)
+head(AAPL)
+```
+
+Computing the monthly returns
+```{r}
+monthlyReturn(AAPL[,6])->apple.monthly
+monthlyReturn(GSPC[,6])->market.monthly
+```
+
+Inspect the data
+```{r}
+head(market.monthly)
+head(apple.monthly)
+```
+
+Next get the treasury bills
+```{r}
+getSymbols("DGS3MO", src="FRED") #Treasury Data will came with all time
+head(DGS3MO)
+no.risk <- DGS3MO[,1]/1200
+head(no.risk)
+tail(no.risk)
+```
+
+Next we'll calculate the excess return
+```{r}
+apple.excess.monthly <- apple.monthly-no.risk
+head(apple.excess.monthly)
+```
+
+Next lets create the market comparison
+```{r}
+market.excess.monthly <- market.monthly-no.risk
+```
+
+Next let's plot Apple vs the Market excess return
+```{r}
+chart.Regression(apple.excess.monthly, market.excess.monthly, fit=F)
+```
+Next let put this into a linear model
+```{r}
+cider <- lm(apple.excess.monthly~market.excess.monthly)
+chart.Regression(apple.excess.monthly, market.excess.monthly, fit=F)
+abline(cider)
+cider
+```
+
+Now that we'veworked through a problem in class let's practice on our own.
+The problem, predict the beta coefficent for JetBlue Airways Corp.
+
+```{r}
+getSymbols("JBLU", from ="2015-05-01", to="2020-05-01")
+skies <- monthlyReturn(JBLU[,6])
+skies.excess.monthly <- skies-no.risk
+lm(skies.excess.monthly~market.excess.monthly)
+```
+
+
+
+
+
+
+

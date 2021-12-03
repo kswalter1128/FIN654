@@ -1,0 +1,54 @@
+---
+title: "Week 3 Synchronous"
+author: "Kyle Walter"
+date: "1/25/2021"
+output: html_document
+---
+
+Here are my notes for week 3
+
+Packages that we need
+
+```{r}
+require(readxl)
+require(quantmod)
+require(lubridate)
+require(tidyverse)
+require(data.table)
+```
+
+Import the Dunkin data into R
+```{r}
+donut <- read_excel("Week 3/Week_3_DNKN.xlsx") %>% data.table()
+head(donut) #always inspect the data!
+```
+
+We need to transform the data of day to make it a date field.
+```{r}
+str(donut)
+donut$DAY <- as.Date(donut$DAY, format = "%Y %b,%d")
+tail(donut) #inspect the data
+str(donut)
+```
+
+Next we'll need to convert to an extensible time series object (xts)
+```{r}
+glazed <- as.xts.data.table(donut)
+chartSeries(glazed, type="candlesticks")
+```
+
+Build a fancy candlestick plot
+```{r}
+require(highcharter)
+hchart(glazed, color="red")
+```
+
+Download the 6-month treasury bills from teh Federal Reserve Bank of Saint Louis
+```{r}
+getSymbols(
+  "DGS6MO",
+  src="FRED"
+)
+head(DGS6MO)
+```
+
